@@ -23,12 +23,18 @@ public:
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
+	bool IsActorActivator(const AActor* OtherActor);
+	UPROPERTY(VisibleAnywhere)
+	uint8 OverlapCount = 0; // max is 255
 
 public:
 	UPROPERTY(EditAnywhere)
 	AActor* MoverActor;
 	UMover* Mover;
 
+	UPROPERTY(EditAnywhere)
+	TArray<FName> ActivatorTags;
+	
 	UFUNCTION()
 	void OnOverlapBegins(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 	UFUNCTION()
