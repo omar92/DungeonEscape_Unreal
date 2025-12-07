@@ -19,7 +19,7 @@ DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
  *  A basic first person character
  */
 UCLASS(abstract)
-class ADungeonEscapeCharacter : public ACharacter
+class ADungeonEscapeCharacter : public ACharacter 
 {
 	GENERATED_BODY()
 
