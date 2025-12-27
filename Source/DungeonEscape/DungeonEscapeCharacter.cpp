@@ -14,7 +14,7 @@ ADungeonEscapeCharacter::ADungeonEscapeCharacter()
 {
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(55.f, 96.0f);
-	
+
 	// Create the first person mesh that will be viewed only by this character's owner
 	FirstPersonMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("First Person Mesh"));
 
@@ -45,7 +45,7 @@ ADungeonEscapeCharacter::ADungeonEscapeCharacter()
 }
 
 void ADungeonEscapeCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-{	
+{
 	// Set up action bindings
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent))
 	{
@@ -59,7 +59,7 @@ void ADungeonEscapeCharacter::SetupPlayerInputComponent(UInputComponent* PlayerI
 		// Looking/Aiming
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ADungeonEscapeCharacter::LookInput);
 		EnhancedInputComponent->BindAction(MouseLookAction, ETriggerEvent::Triggered, this, &ADungeonEscapeCharacter::LookInput);
-		
+
 		//interact
 		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Started, this, &ADungeonEscapeCharacter::DoInteract);
 	}
@@ -77,7 +77,6 @@ void ADungeonEscapeCharacter::MoveInput(const FInputActionValue& Value)
 
 	// pass the axis values to the move input
 	DoMove(MovementVector.X, MovementVector.Y);
-
 }
 
 void ADungeonEscapeCharacter::LookInput(const FInputActionValue& Value)
@@ -87,7 +86,6 @@ void ADungeonEscapeCharacter::LookInput(const FInputActionValue& Value)
 
 	// pass the axis values to the aim input
 	DoAim(LookAxisVector.X, LookAxisVector.Y);
-
 }
 
 void ADungeonEscapeCharacter::DoAim(float Yaw, float Pitch)
@@ -125,5 +123,25 @@ void ADungeonEscapeCharacter::DoJumpEnd()
 void ADungeonEscapeCharacter::DoInteract()
 {
 	//log interact
-	UE_LOG(LogDungeonEscape, Log, TEXT("Interact action triggered in %s"), *GetName() );
+	auto world = GetWorld();
+	auto time = world->GetTimeSeconds();
+	UE_LOG(LogDungeonEscape, Log, TEXT("Current world time: %f"), time);
+	// FHitResult HitResult;
+	// auto isHit = world->SweepSingleByChannel(
+	// 	HitResult,
+	// 	FirstPersonCameraComponent->GetComponentLocation(),
+	// 	FirstPersonCameraComponent->GetComponentLocation() + FirstPersonCameraComponent->GetForwardVector() * 200.f,
+	// 	FQuat::Identity,
+	// 	ECC_Visibility,
+	// 	FCollisionShape::MakeSphere(10.f)
+	// );
+	//
+	// if (isHit)
+	// {
+	// 	if (const AActor* HitActor = HitResult.GetActor())
+	// 	{
+	// 		UE_LOG(LogDungeonEscape, Log, TEXT("Interacted with %s"), *HitActor->GetName());
+	// 		// You can add further interaction logic here
+	// 	}
+	// }
 }
