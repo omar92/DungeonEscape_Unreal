@@ -49,6 +49,10 @@ protected:
 	UPROPERTY(EditAnywhere, Category ="Input")
 	class UInputAction* MouseLookAction;
 	
+	/** Interact Input Action */
+	UPROPERTY(EditAnywhere, Category ="Input")
+	class UInputAction* InteractAction;
+	
 public:
 	ADungeonEscapeCharacter();
 
@@ -75,6 +79,10 @@ protected:
 	/** Handles jump end inputs from either controls or UI interfaces */
 	UFUNCTION(BlueprintCallable, Category="Input")
 	virtual void DoJumpEnd();
+	
+	/** Handles interact inputs from either controls or UI interfaces */
+	UFUNCTION(BlueprintCallable, Category="Input|new")
+	virtual void DoInteract();
 
 protected:
 

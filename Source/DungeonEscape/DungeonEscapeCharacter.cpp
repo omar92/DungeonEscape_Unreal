@@ -59,6 +59,9 @@ void ADungeonEscapeCharacter::SetupPlayerInputComponent(UInputComponent* PlayerI
 		// Looking/Aiming
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ADungeonEscapeCharacter::LookInput);
 		EnhancedInputComponent->BindAction(MouseLookAction, ETriggerEvent::Triggered, this, &ADungeonEscapeCharacter::LookInput);
+		
+		//interact
+		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Started, this, &ADungeonEscapeCharacter::DoInteract);
 	}
 	else
 	{
@@ -117,4 +120,10 @@ void ADungeonEscapeCharacter::DoJumpEnd()
 {
 	// pass StopJumping to the character
 	StopJumping();
+}
+
+void ADungeonEscapeCharacter::DoInteract()
+{
+	//log interact
+	UE_LOG(LogDungeonEscape, Log, TEXT("Interact action triggered in %s"), *GetName() );
 }
