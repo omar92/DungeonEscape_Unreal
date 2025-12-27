@@ -57,9 +57,9 @@ void UTriggerComponent::OnOverlapBegins(UPrimitiveComponent* OverlappedComponent
 		return;
 		// prevent overflow
 	}
-	
+
 	OverlapCount++;
-	Mover->Open();
+	Trigger(true);
 }
 
 void UTriggerComponent::OnOverlapEnds(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
@@ -70,5 +70,18 @@ void UTriggerComponent::OnOverlapEnds(UPrimitiveComponent* OverlappedComponent, 
 
 	OverlapCount--;
 	if (OverlapCount > 0) return;
-	Mover->Close();
+	Trigger(false);
+}
+
+void UTriggerComponent::Trigger(bool bTrigger) const
+{
+	if (!Mover) return;
+	if (bTrigger)
+	{
+		Mover->Open();
+	}
+	else
+	{
+		Mover->Close();
+	}
 }
