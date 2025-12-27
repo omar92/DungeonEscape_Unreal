@@ -125,23 +125,30 @@ void ADungeonEscapeCharacter::DoInteract()
 	//log interact
 	auto world = GetWorld();
 	auto time = world->GetTimeSeconds();
-	UE_LOG(LogDungeonEscape, Log, TEXT("Current world time: %f"), time);
-	// FHitResult HitResult;
-	// auto isHit = world->SweepSingleByChannel(
-	// 	HitResult,
-	// 	FirstPersonCameraComponent->GetComponentLocation(),
-	// 	FirstPersonCameraComponent->GetComponentLocation() + FirstPersonCameraComponent->GetForwardVector() * 200.f,
-	// 	FQuat::Identity,
-	// 	ECC_Visibility,
-	// 	FCollisionShape::MakeSphere(10.f)
-	// );
-	//
-	// if (isHit)
-	// {
-	// 	if (const AActor* HitActor = HitResult.GetActor())
-	// 	{
-	// 		UE_LOG(LogDungeonEscape, Log, TEXT("Interacted with %s"), *HitActor->GetName());
-	// 		// You can add further interaction logic here
-	// 	}
-	// }
+	FHitResult HitResult;
+	auto start = FirstPersonCameraComponent->GetComponentLocation();
+	auto end = FirstPersonCameraComponent->GetComponentLocation() + FirstPersonCameraComponent->GetForwardVector() * InteractRange;
+
+	auto isHit = world->SweepSingleByChannel(
+		HitResult,
+		start,
+		end,
+		FQuat::Identity,
+
+		ECC_Visibility,
+		FCollisionShape::MakeSphere(10.f)
+	);
+
+	DrawDebugLine(world, start, end, FColor::Green, false, 5.f);
+	DrawDebugSphere(world, end, 10.f, 12, FColor::Red, false, 5.f);
+
+
+	if (isHit)
+	{
+		if (const AActor* HitActor = HitResult.GetActor())
+		{
+			UE_LOG(LogDungeonEscape, Log, TEXT("Interacted with %s"), *HitActor->GetName());
+			// You can add further interaction logic here
+		}
+	}
 }

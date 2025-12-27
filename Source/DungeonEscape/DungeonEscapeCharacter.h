@@ -53,6 +53,9 @@ protected:
 	UPROPERTY(EditAnywhere, Category ="Input")
 	class UInputAction* InteractAction;
 	
+	UPROPERTY(EditAnywhere, Category ="Input")
+	float InteractRange = 300.f;
+	
 public:
 	ADungeonEscapeCharacter();
 
@@ -98,5 +101,6 @@ public:
 	/** Returns first person camera component **/
 	UCameraComponent* GetFirstPersonCameraComponent() const { return FirstPersonCameraComponent; }
 
+	
 };
 
