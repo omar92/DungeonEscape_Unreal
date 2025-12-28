@@ -9,6 +9,7 @@
 #include "InputActionValue.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "DungeonEscape.h"
+#include "Math/Color.h"
 
 ADungeonEscapeCharacter::ADungeonEscapeCharacter()
 {
@@ -120,6 +121,34 @@ void ADungeonEscapeCharacter::DoJumpEnd()
 	StopJumping();
 }
 
+void ADungeonEscapeCharacter::DebugSweep(const UWorld* World, const FVector& Start, const UE::Math::TVector<double>& End) const
+{
+	DrawDebugLine(World, Start, End, FColor::Green, false, 5.f); //line trace
+	//draw spheres along the sweep path for visualization
+	constexpr int32 NumSpheres = 10; //number of spheres to draw along the path and constexpr for compile time constant
+	if (NumSpheres > 0)
+	{
+		constexpr float InvNum = 1.0f / static_cast<float>(NumSpheres);
+		const FLinearColor StartColor = FLinearColor::Blue;
+		const FLinearColor EndColor = FLinearColor::Red;
+		constexpr float Lifetime = 5.f;
+		constexpr int32 Segments = 12;
+		const float Radius = InteractSphereRadius;
+
+		for (int32 i = 0; i <= NumSpheres; ++i)
+		{
+			const float T = static_cast<float>(i) * InvNum;
+			const FVector SphereLocation = FMath::Lerp(Start, End, T);
+
+			// Smooth color interpolation in HSV space, then convert to FColor
+			const FLinearColor LerpColor = FLinearColor::LerpUsingHSV(StartColor, EndColor, T);
+			const FColor SphereColor = LerpColor.ToFColor(true);
+			const float SphereRadius = FMath::Lerp(Radius/NumSpheres, Radius, T);
+			DrawDebugSphere(World, SphereLocation, SphereRadius, Segments, SphereColor, false, Lifetime);
+		}
+	}
+}
+
 void ADungeonEscapeCharacter::DoInteract()
 {
 	//log interact
@@ -136,11 +165,10 @@ void ADungeonEscapeCharacter::DoInteract()
 		FQuat::Identity,
 
 		ECC_Visibility,
-		FCollisionShape::MakeSphere(10.f)
+		FCollisionShape::MakeSphere(InteractSphereRadius)
 	);
 
-	DrawDebugLine(world, start, end, FColor::Green, false, 5.f);
-	DrawDebugSphere(world, end, 10.f, 12, FColor::Red, false, 5.f);
+	DebugSweep(world, start, end);
 
 
 	if (isHit)
