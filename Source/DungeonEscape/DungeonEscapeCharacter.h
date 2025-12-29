@@ -85,7 +85,7 @@ protected:
 	/** Handles jump end inputs from either controls or UI interfaces */
 	UFUNCTION(BlueprintCallable, Category="Input")
 	virtual void DoJumpEnd();
-	void DebugSweep(const UWorld* World, const FVector& Start, const UE::Math::TVector<double>& End) const;
+	void DebugSweep(const UWorld* World, const FVector& Start, const FVector& End) const;
 
 	/** Handles interact inputs from either controls or UI interfaces */
 	UFUNCTION(BlueprintCallable, Category="Input|new")

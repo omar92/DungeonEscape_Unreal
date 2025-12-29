@@ -121,7 +121,7 @@ void ADungeonEscapeCharacter::DoJumpEnd()
 	StopJumping();
 }
 
-void ADungeonEscapeCharacter::DebugSweep(const UWorld* World, const FVector& Start, const UE::Math::TVector<double>& End) const
+void ADungeonEscapeCharacter::DebugSweep(const UWorld* World, const FVector& Start, const FVector& End)const
 {
 	DrawDebugLine(World, Start, End, FColor::Green, false, 5.f); //line trace
 	//draw spheres along the sweep path for visualization
@@ -163,12 +163,11 @@ void ADungeonEscapeCharacter::DoInteract()
 		start,
 		end,
 		FQuat::Identity,
-
-		ECC_Visibility,
+		ECC_GameTraceChannel2,
 		FCollisionShape::MakeSphere(InteractSphereRadius)
 	);
 
-	DebugSweep(world, start, end);
+	
 
 
 	if (isHit)
@@ -177,6 +176,14 @@ void ADungeonEscapeCharacter::DoInteract()
 		{
 			UE_LOG(LogDungeonEscape, Log, TEXT("Interacted with %s"), *HitActor->GetName());
 			// You can add further interaction logic here
+			
+			if (HitActor->Implements<UInteractable>())
+			{
+				UInteractable::Execute_OnInteract(HitActor, this);
+			}	
+
 		}
 	}
+	
+	DebugSweep(world, start, end);
 }
