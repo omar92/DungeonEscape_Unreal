@@ -10,6 +10,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "DungeonEscape.h"
 #include "Math/Color.h"
+#include "Interactable.h"
 
 ADungeonEscapeCharacter::ADungeonEscapeCharacter()
 {
@@ -153,7 +154,6 @@ void ADungeonEscapeCharacter::DoInteract()
 {
 	//log interact
 	auto world = GetWorld();
-	auto time = world->GetTimeSeconds();
 	FHitResult HitResult;
 	auto start = FirstPersonCameraComponent->GetComponentLocation();
 	auto end = FirstPersonCameraComponent->GetComponentLocation() + FirstPersonCameraComponent->GetForwardVector() * InteractRange;
@@ -172,18 +172,18 @@ void ADungeonEscapeCharacter::DoInteract()
 
 	if (isHit)
 	{
-		if (const AActor* HitActor = HitResult.GetActor())
+		if (AActor* HitActor = HitResult.GetActor())
 		{
 			UE_LOG(LogDungeonEscape, Log, TEXT("Interacted with %s"), *HitActor->GetName());
 			// You can add further interaction logic here
 			
 			if (HitActor->Implements<UInteractable>())
 			{
-				UInteractable::Execute_OnInteract(HitActor, this);
-			}	
+				IInteractable::Execute_OnInteract(HitActor, this);
+			}
 
 		}
 	}
-	
+
 	DebugSweep(world, start, end);
 }

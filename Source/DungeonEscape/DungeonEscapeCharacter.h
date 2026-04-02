@@ -7,6 +7,8 @@
 #include "Logging/LogMacros.h"
 #include "DungeonEscapeCharacter.generated.h"
 
+#include "Interactable.h"
+
 class UInputComponent;
 class USkeletalMeshComponent;
 class UCameraComponent;
@@ -107,4 +109,3 @@ public:
 
 	
 };
-
